@@ -1,8 +1,9 @@
 'use client'
 
 import { useSearchParams } from "next/navigation"
-import IncomeView from "./IncomeView"
-import ExpensesView from "./ExpensesView"
+import IncomeView from "./Income"
+import ExpensesView from "./Expenses"
+import Overview from "./Overview"
 
 export default function AccountView() {
   const searchParams = useSearchParams()
@@ -12,9 +13,5 @@ export default function AccountView() {
 
   if (view === 'expenses') return <ExpensesView />
 
-  return (
-    <div>
-      overview
-    </div>
-  )
+  return <Overview />
 }
