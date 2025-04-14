@@ -4,3 +4,24 @@
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
+/* @layer base {
+  ul li {
+    @apply list-none;
+  }
+} */
+
+@layer base {
+  body {
+    @apply bg-gray-950 text-gray-200;
+  }
+  nav {
+    @apply w-full bg-gray-900;
+  }
+}
+
+@layer components {
+  .nav-tab {
+    @apply grid place-items-center w-1/3;
+  }
+}
