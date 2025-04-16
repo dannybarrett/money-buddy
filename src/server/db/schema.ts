@@ -1,6 +1,8 @@
 import { relations, sql } from "drizzle-orm";
 import { index, pgTableCreator, primaryKey } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
+import { sources } from "next/dist/compiled/webpack/webpack";
+import type { IncomeType } from "../api/routers/income";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -78,6 +80,39 @@ export const accounts = createTable(
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
+}));
+
+export const incomeSources = createTable(
+  "income",
+  (d) => ({
+    userId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => users.id)
+      .primaryKey(),
+    sources: d.json()
+      .notNull()
+      .default([])
+      .$type<IncomeType[]>()
+  }),
+)
+
+export const incomeSourcesRelations = relations(incomeSources, ({ one }) => ({
+  user: one(users, { fields: [incomeSources.userId], references: [users.id] }),
+}));
+export const expenses = createTable(
+  "expenses",
+  (d) => ({
+    userId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => users.id)
+      .primaryKey(),
+    sources: d.json().notNull(),
+  }),
+)
+export const expensesRelations = relations(expenses, ({ one }) => ({
+  user: one(users, { fields: [expenses.userId], references: [users.id] }),
 }));
 
 export const sessions = createTable(

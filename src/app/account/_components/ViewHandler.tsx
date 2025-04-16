@@ -6,6 +6,7 @@ import Account from "../_views/Account";
 import { useSearchParams } from "next/navigation";
 
 export default function ViewHandler() {
+  
   const searchParams = useSearchParams();
   const view = searchParams.get("view") || "account";
 
