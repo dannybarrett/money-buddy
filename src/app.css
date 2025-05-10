@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold;
+  }
+
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+  h3 {
+    @apply text-lg;
+  }
+
+  p {
+    @apply text-base;
+  }
+  body {
+    @apply bg-neutral-950 text-neutral-200;
+  }
+
+  * {
+    @apply border-neutral-800;
+  }
+
+  a {
+    @apply text-sky-500 font-medium;
+  }
+
+  svg[class^="lucide"] {
+    @apply w-4 h-4;
+  }
+}
