@@ -27,6 +27,8 @@ export default function RecentTransactions() {
     ]);
   }, [transactions]);
 
+  console.log(recentTransactions);
+
   return (
     <Card>
       <CardHeader>
@@ -47,20 +49,21 @@ export default function RecentTransactions() {
               return (
                 <TableRow key={transaction.transaction_id}>
                   <TableCell>{transaction.name}</TableCell>
-                  <TableCell>${transaction.amount}</TableCell>
+                  <TableCell
+                    className={
+                      transaction.amount > 0
+                        ? "text-rose-500"
+                        : "text-emerald-500"
+                    }
+                  >
+                    ${Math.abs(transaction.amount).toFixed(2)}
+                  </TableCell>
                   <TableCell>{transaction.date}</TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
-        {/* <div className="flex flex-col gap-4">
-          {recentTransactions.slice(0, showIndex).map((transaction: any) => {
-            return (
-              <div key={transaction.transaction_id}>{transaction.name}</div>
-            );
-          })}
-        </div> */}
         {showIndex < recentTransactions.length && (
           <Button onClick={() => setShowIndex(showIndex + 5)}>Show More</Button>
         )}
