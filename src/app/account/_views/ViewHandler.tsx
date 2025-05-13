@@ -20,6 +20,7 @@ export default function ViewHandler({
     expenses: Expense[];
     budget: Budget | null;
     accountInfo: any;
+    transactions: any;
   };
 }) {
   const view = useStore((state: any) => state.view);
@@ -28,6 +29,7 @@ export default function ViewHandler({
   const setExpenses = useStore((state: any) => state.setExpenses);
   const setBudget = useStore((state: any) => state.setBudget);
   const setAccountInfo = useStore((state: any) => state.setAccountInfo);
+  const setTransactions = useStore((state: any) => state.setTransactions);
   useEffect(() => {
     const init = async () => {
       setIncomeSources(state.incomeSources);
@@ -35,6 +37,7 @@ export default function ViewHandler({
       setSession(state.session);
       setBudget(state.budget);
       setAccountInfo(state.accountInfo);
+      setTransactions(state.transactions);
     };
     init();
   }, []);

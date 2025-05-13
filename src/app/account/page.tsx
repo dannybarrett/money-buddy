@@ -5,7 +5,7 @@ import ViewHandler from "./_views/ViewHandler";
 import { getBudget, getExpenses, getIncomeSources } from "./actions";
 import AccountNav from "./Nav";
 import { Suspense } from "react";
-import { getAccountInfo } from "./plaid-actions";
+import { getAccountInfo, getTransactions } from "./plaid-actions";
 export default async function Account() {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -18,6 +18,7 @@ export default async function Account() {
   const expenses = await getExpenses();
   const budget = await getBudget();
   const accountInfo = await getAccountInfo();
+  const transactions = await getTransactions();
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <AccountNav />
@@ -29,6 +30,7 @@ export default async function Account() {
           expenses: expenses ?? [],
           budget: budget ?? null,
           accountInfo: accountInfo ?? [],
+          transactions: transactions ?? [],
         }}
       />
     </Suspense>

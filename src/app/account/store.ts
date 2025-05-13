@@ -16,4 +16,6 @@ export const useStore = create((set) => ({
   setBudget: (budget: any) => set({ budget }),
   accountInfo: [],
   setAccountInfo: (accountInfo: any) => set({ accountInfo }),
+  transactions: [],
+  setTransactions: (transactions: any) => set({ transactions }),
 }));

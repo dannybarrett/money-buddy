@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Overview from "./Overview";
 import MonthlyBreakdown from "./MonthlyBreakdown";
 import MonthlyBudget from "./MonthlyBudget";
+import RecentTransactions from "./RecentTransactions";
 export default function Home() {
   const [session, setSession] = useState<any>({ name: "" });
 
@@ -24,6 +25,7 @@ export default function Home() {
       <Overview />
       <MonthlyBreakdown />
       <MonthlyBudget />
+      <RecentTransactions />
     </div>
   );
 }
