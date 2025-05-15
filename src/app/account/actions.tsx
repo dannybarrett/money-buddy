@@ -141,23 +141,47 @@ export async function updateExpense(values: {
   amount: string;
   date: string;
   categories: Category[];
+  transactionId: string | null;
 }) {
   const session = await getSession();
 
   if (!session || !session.user) return;
 
-  const result = await db
-    .update(expenses)
-    .set({
+  const exists =
+    values.transactionId &&
+    (await db.$count(
+      expenses,
+      eq(expenses.transactionId, values.transactionId)
+    ));
+
+  if (exists) {
+    const result = await db
+      .update(expenses)
+      .set({
+        ...values,
+        date: new Date(values.date),
+      })
+      .where(eq(expenses.id, values.id))
+      .returning();
+
+    return {
+      success: result.length > 0,
+      expense: result[0],
+    };
+  }
+
+  const newExpense = await db
+    .insert(expenses)
+    .values({
       ...values,
       date: new Date(values.date),
+      userId: session.user.id,
     })
-    .where(eq(expenses.id, values.id))
     .returning();
 
   return {
-    success: result.length > 0,
-    expense: result[0],
+    success: newExpense.length > 0,
+    expense: newExpense[0],
   };
 }
 

@@ -23,16 +23,27 @@ function getMonthName(monthIndex: number): string {
 
 export default function MonthlyBreakdown() {
   const incomeSources = useStore((state: any) => state.incomeSources);
+  const transactions = useStore((state: any) => state.transactions);
   const expenses = useStore((state: any) => state.expenses);
   const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
+
+  const negativeTransactions = transactions.flatMap((item: any) =>
+    item.added.filter((item: any) => item.amount > 0)
+  );
+
+  const positiveTransactions = transactions.flatMap((item: any) =>
+    item.added.filter((item: any) => item.amount < 0)
+  );
+
+  const currentIncome: any[] = [...incomeSources, ...positiveTransactions];
+  const currentExpenses: any[] = [...expenses, ...negativeTransactions];
 
   const data = () => {
     const financeData = [];
     for (let i = 0; i < 6; i++) {
       const index = (i + 12) % 12;
 
-      const monthIncome = incomeSources.filter((item: any) => {
+      const monthIncome = currentIncome.filter((item: any) => {
         const itemMonth = new Date(item.date).getMonth();
 
         if (itemMonth === currentMonth - index) {
@@ -40,7 +51,7 @@ export default function MonthlyBreakdown() {
         }
       });
 
-      const monthExpenses = expenses.filter((item: any) => {
+      const monthExpenses = currentExpenses.filter((item: any) => {
         const itemMonth = new Date(item.date).getMonth();
 
         if (itemMonth === currentMonth - index) {
@@ -95,7 +106,10 @@ export default function MonthlyBreakdown() {
         <CardTitle>Monthly Breakdown</CardTitle>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={config} className="h-[400px] w-full">
+        <ChartContainer
+          config={config}
+          className="h-[150px] lg:h-[400px] w-full"
+        >
           <BarChart data={data().reverse()}>
             <XAxis dataKey="name" />
             <YAxis name="amount" />

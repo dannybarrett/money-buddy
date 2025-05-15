@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -27,8 +26,6 @@ export default function RecentTransactions() {
     ]);
   }, [transactions]);
 
-  console.log(recentTransactions);
-
   return (
     <Card>
       <CardHeader>
@@ -48,7 +45,15 @@ export default function RecentTransactions() {
             {recentTransactions.slice(0, showIndex).map((transaction: any) => {
               return (
                 <TableRow key={transaction.transaction_id}>
-                  <TableCell>{transaction.name}</TableCell>
+                  <TableCell className="flex items-center gap-1">
+                    <img
+                      src={transaction.personal_finance_category_icon_url}
+                      alt={transaction.name}
+                      width={16}
+                      height={16}
+                    />
+                    {transaction.name}
+                  </TableCell>
                   <TableCell
                     className={
                       transaction.amount > 0

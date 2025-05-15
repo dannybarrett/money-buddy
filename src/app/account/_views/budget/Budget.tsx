@@ -29,8 +29,8 @@ export default function BudgetView() {
       <h1>Budget</h1>
       {categories.length === 0
         ? "No budget set! Add a category to get started."
-        : categories.map((category: any) => (
-            <div key={category.id} className="flex gap-2">
+        : categories.map((category: any, index: number) => (
+            <div key={index} className="flex gap-2">
               <p>{category.name}</p>
               <p>${category.amount}</p>
             </div>

@@ -8,7 +8,13 @@ import { useStore } from "../../store";
 import { addExpense, updateExpense } from "../../actions";
 import { Expense } from "@/lib/types";
 
-export default function EditExpense({ expense }: { expense: Expense }) {
+export default function EditExpense({
+  expense,
+  transactionId,
+}: {
+  expense: Expense;
+  transactionId: string | null;
+}) {
   const [date, setDate] = useState<Date | undefined>(new Date(expense.date));
   const expenses = useStore((state: any) => state.expenses);
   const setExpenses = useStore((state: any) => state.setExpenses);
@@ -25,6 +31,7 @@ export default function EditExpense({ expense }: { expense: Expense }) {
       amount: amount as string,
       date: date?.toISOString() as string,
       categories: [],
+      transactionId: transactionId,
     });
 
     if (query?.success) {
