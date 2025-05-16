@@ -1,12 +1,5 @@
 import { Category } from "@/lib/types";
-import {
-  pgTable,
-  text,
-  timestamp,
-  boolean,
-  json,
-  integer,
-} from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, json } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
