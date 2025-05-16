@@ -1,4 +1,3 @@
-import { Expense } from "@/lib/types";
 import { useStore } from "../../store";
 import {
   Sheet,

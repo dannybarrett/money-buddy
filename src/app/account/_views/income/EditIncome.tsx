@@ -2,7 +2,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { addIncomeSource, updateIncomeSource } from "../../actions";
+import { updateIncomeSource } from "../../actions";
 import { Button } from "@/components/ui/button";
 import { useStore } from "../../store";
 import { IncomeSource } from "@/lib/types";

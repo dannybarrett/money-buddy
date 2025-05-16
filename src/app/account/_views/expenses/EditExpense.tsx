@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { SheetClose } from "@/components/ui/sheet";
 import { useState } from "react";
 import { useStore } from "../../store";
-import { addExpense, updateExpense } from "../../actions";
+import { updateExpense } from "../../actions";
 import { Expense } from "@/lib/types";
 
 export default function EditExpense({

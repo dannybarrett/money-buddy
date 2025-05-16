@@ -1,5 +1,4 @@
 import { authClient } from "@/lib/auth-client";
-import { useStore } from "../../store";
 import { useEffect, useState } from "react";
 import Overview from "./Overview";
 import MonthlyBreakdown from "./MonthlyBreakdown";
@@ -8,7 +7,7 @@ import RecentTransactions from "./RecentTransactions";
 export default function Home() {
   const [session, setSession] = useState<any>({ name: "" });
 
-  const { data, error } = authClient.useSession();
+  const { data } = authClient.useSession();
   useEffect(() => {
     if (data) {
       setSession(data);

@@ -127,6 +127,7 @@ export async function getAccountInfo() {
 
     return accountInfo;
   } catch (error) {
+    console.error(error);
     return null;
   }
 }
@@ -155,21 +156,10 @@ export async function getTransactions() {
 
   try {
     for (const accessToken of accessTokens) {
-      const endDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
-      const startDate = `${
-        parseInt(new Date(endDate).getFullYear().toString()) - 1
-      }-${new Date().getMonth()}-${new Date().getDate()}`;
-
-      // const response = await client.transactionsGet({
-      //   access_token: accessToken.accessToken,
-      //   start_date: startDate,
-      //   end_date: endDate,
-      // });
-
-      const request = {
-        access_token: accessToken.accessToken,
-        cursor: undefined,
-      };
+      // const endDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
+      // const startDate = `${
+      //   parseInt(new Date(endDate).getFullYear().toString()) - 1
+      // }-${new Date().getMonth()}-${new Date().getDate()}`;
 
       // The transactionsSync endpoint requires a cursor for pagination
       // For initial sync, we need to set cursor to null explicitly

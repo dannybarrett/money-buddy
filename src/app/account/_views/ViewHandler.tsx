@@ -4,7 +4,6 @@ import Home from "./home/Home";
 import Income from "./income/Income";
 import Expenses from "./expenses/Expenses";
 import { useEffect } from "react";
-import { getIncomeSources } from "../actions";
 import { Session } from "better-auth";
 import { IncomeSource, Expense, Budget } from "@/lib/types";
 import { useStore } from "../store";
@@ -40,7 +39,15 @@ export default function ViewHandler({
       setTransactions(state.transactions);
     };
     init();
-  }, []);
+  }, [
+    state,
+    setIncomeSources,
+    setExpenses,
+    setSession,
+    setBudget,
+    setAccountInfo,
+    setTransactions,
+  ]);
 
   switch (view) {
     case "income":

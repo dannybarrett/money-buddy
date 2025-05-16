@@ -65,9 +65,9 @@ export default function BankAccounts() {
 
 function PlaidButton({ linkToken }: { linkToken: string }) {
   const setAccountInfo = useStore((state: any) => state.setAccountInfo);
-  const { ready, open } = usePlaidLink({
+  const { open } = usePlaidLink({
     token: linkToken,
-    onSuccess: async (public_token, metadata) => {
+    onSuccess: async (public_token) => {
       const response = await exchangePublicToken(public_token);
       if (response?.success) {
         setAccountInfo(await getAccountInfo());
