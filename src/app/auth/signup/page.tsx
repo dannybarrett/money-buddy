@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
-import { Loader, LogIn } from "lucide-react";
+import { Loader, UserRoundPlus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useState } from "react";
@@ -25,8 +25,11 @@ export default function Login() {
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("email");
     const password = formData.get("password");
+    const firstName = formData.get("firstName");
+    const lastName = formData.get("lastName");
 
-    const { data, error } = await authClient.signIn.email({
+    const { data, error } = await authClient.signUp.email({
+      name: `${firstName} ${lastName}`,
       email: email as string,
       password: password as string,
       callbackURL: "/account",
@@ -47,18 +50,37 @@ export default function Login() {
       <Card className="w-full max-w-md p-4 lg:p-8">
         <CardHeader className="p-0 text-center">
           <CardTitle>
-            <h1>Login</h1>
+            <h1>Sign up</h1>
           </CardTitle>
-          <CardDescription>Enter your credentials to continue</CardDescription>
+          <CardDescription>Create a new account</CardDescription>
           <p className="text-rose-500 text-sm">{error}</p>
         </CardHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 lg:gap-8">
+          <div className="flex flex-col gap-2">
+            <Label>First Name</Label>
+            <Input
+              type="text"
+              name="firstName"
+              placeholder="John"
+              required={true}
+              onChange={() => setError(null)}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label>Last Name (optional)</Label>
+            <Input
+              type="text"
+              name="lastName"
+              placeholder="Doe"
+              onChange={() => setError(null)}
+            />
+          </div>
           <div className="flex flex-col gap-2">
             <Label>Email</Label>
             <Input
               type="email"
               name="email"
-              placeholder="someone@example.com"
+              placeholder="johndoe@example.com"
               required={true}
               onChange={() => setError(null)}
             />
@@ -77,18 +99,18 @@ export default function Login() {
             {loading ? (
               <>
                 <Loader className="animate-spin" />
-                <span>Logging in...</span>
+                <span>Creating account...</span>
               </>
             ) : (
               <>
-                <LogIn />
-                <span>Login</span>
+                <UserRoundPlus />
+                <span>Create account</span>
               </>
             )}
           </Button>
         </form>
       </Card>
-      <Link href="/auth/signup">Don&apos;t have an account? Sign up</Link>
+      <Link href="/auth/login">Already have an account? Login</Link>
     </div>
   );
 }
