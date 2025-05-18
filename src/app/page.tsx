@@ -1,3 +1,4 @@
+import CTA from "./CTA";
 import Features from "./Features";
 import GetStarted from "./GetStarted";
 import Hero from "./Hero";
@@ -11,6 +12,7 @@ export default function Home() {
       <Features />
       <GetStarted />
       <Pricing />
+      <CTA />
     </MainLayout>
   );
 }

@@ -21,15 +21,15 @@ export default function Hero() {
                 Learn more
               </Button>
             </div>
-            <div className="mt-8 flex items-center gap-4">
+            {/* <div className="mt-8 flex items-center gap-4">
               <div className="flex -space-x-2">
-                <div className="w-8 h-8 rounded-full bg-moneybuddy-teal text-white flex items-center justify-center text-xs font-medium">
+                <div className="w-8 h-8 rounded-full bg-money-buddy-teal text-white flex items-center justify-center text-xs font-medium">
                   JD
                 </div>
-                <div className="w-8 h-8 rounded-full bg-moneybuddy-navy text-white flex items-center justify-center text-xs font-medium">
+                <div className="w-8 h-8 rounded-full bg-money-buddy-navy text-white flex items-center justify-center text-xs font-medium">
                   KL
                 </div>
-                <div className="w-8 h-8 rounded-full bg-moneybuddy-coral text-white flex items-center justify-center text-xs font-medium">
+                <div className="w-8 h-8 rounded-full bg-money-buddy-coral text-white flex items-center justify-center text-xs font-medium">
                   MP
                 </div>
                 <div className="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center text-xs font-medium">
@@ -39,7 +39,7 @@ export default function Hero() {
               <p className="text-sm text-gray-500">
                 Join 10,000+ users already saving money
               </p>
-            </div>
+            </div> */}
           </div>
           <div className="relative">
             <div className="w-full h-[500px] bg-money-buddy-navy/5 rounded-2xl overflow-hidden relative animate animate-float">
