@@ -136,13 +136,20 @@
   body {
     @apply bg-background text-foreground;
   }
-
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold;
+  }
   h1 {
-    @apply text-2xl font-bold;
+    @apply text-2xl;
   }
 
   h2 {
-    @apply text-xl font-bold;
+    @apply text-xl;
   }
 
   a {
@@ -160,6 +167,9 @@
   }
   .animate-float {
     animation: float 3s ease-in-out infinite;
+  }
+  .section-padding {
+    @apply p-4 py-16 lg:p-16 lg:py-24;
   }
 }
 

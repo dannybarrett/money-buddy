@@ -12,7 +12,7 @@ export default function Features() {
         </p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <Card className="gap-0 group shadow-none hover:shadow-sm transition-shadow">
+        <Card className="gap-0 group shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="grid gap-8">
             <DollarSign className="w-10 h-10 text-money-buddy-teal p-2 bg-money-buddy-teal/10 rounded-lg" />
             <CardTitle>
@@ -28,7 +28,7 @@ export default function Features() {
             </p>
           </CardContent>
         </Card>
-        <Card className="gap-0 group shadow-none hover:shadow-sm transition-shadow">
+        <Card className="gap-0 group shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="grid gap-8">
             <PieChart className="w-10 h-10 text-money-buddy-coral p-2 bg-money-buddy-coral/10 rounded-lg" />
             <CardTitle>
@@ -44,7 +44,7 @@ export default function Features() {
             </p>
           </CardContent>
         </Card>
-        <Card className="gap-0 group shadow-none hover:shadow-sm transition-shadow">
+        <Card className="gap-0 group shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="grid gap-8">
             <Landmark className="w-10 h-10 text-indigo-400 p-2 bg-indigo-400/10 rounded-lg" />
             <CardTitle>
