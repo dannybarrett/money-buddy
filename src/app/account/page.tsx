@@ -20,6 +20,8 @@ export default async function Account() {
   const accountInfo = await getAccountInfo();
   const transactions = await getTransactions();
 
+  console.log(transactions);
+
   // return <div>test</div>;
   return (
     <Suspense fallback={<div>Loading...</div>}>

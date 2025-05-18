@@ -7,23 +7,47 @@ import {
   Landmark,
   PiggyBank,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 export default function Overview() {
   const incomeSources = useStore((state: any) => state.incomeSources);
   const expenses = useStore((state: any) => state.expenses);
+  const transactions = useStore((state: any) => state.transactions);
+  const accountInfo = useStore((state: any) => state.accountInfo);
+  const [balance, setBalance] = useState(0);
+  const [currentIncome, setCurrentIncome] = useState(0);
+  const [currentExpenses, setCurrentExpenses] = useState(0);
+  // const [currentSavings, setCurrentSavings] = useState(0);
 
-  const currentIncome = incomeSources.reduce(
-    (acc: number, curr: IncomeSource) => acc + parseFloat(curr.amount),
-    0
-  );
+  useEffect(() => {
+    setCurrentIncome(
+      incomeSources.reduce(
+        (acc: number, curr: IncomeSource) => acc + parseFloat(curr.amount),
+        0
+      )
+    );
 
-  const currentExpenses = expenses.reduce(
-    (acc: number, curr: Expense) => acc + parseFloat(curr.amount),
-    0
-  );
+    setCurrentExpenses(
+      expenses.reduce(
+        (acc: number, curr: Expense) => acc + parseFloat(curr.amount),
+        0
+      ) +
+        transactions
+          .flatMap((item: any) => item.added)
+          .filter((item: any) => item.amount > 0)
+          .reduce((acc: number, curr: any) => acc + parseFloat(curr.amount), 0)
+    );
 
-  const currentSavings = currentIncome - currentExpenses;
-
-  const balance = 1600.0;
+    setBalance(
+      accountInfo
+        .map((bank: any) =>
+          bank.accounts.reduce(
+            (acc: number, curr: any) => acc + parseFloat(curr.balances.current),
+            0
+          )
+        )
+        .reduce((acc: number, curr: number) => acc + curr, 0)
+    );
+  }, [accountInfo, incomeSources, expenses, transactions]);
 
   const cards = [
     {
@@ -49,7 +73,7 @@ export default function Overview() {
     },
     {
       name: "Savings",
-      value: currentSavings,
+      value: currentIncome - currentExpenses,
       icon: (
         <PiggyBank className="bg-money-buddy-coral/10 text-money-buddy-coral rounded-lg p-2.5 w-10 h-10" />
       ),

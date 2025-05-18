@@ -32,10 +32,9 @@ export default function MonthlyBudget() {
           <div className="flex flex-col gap-4">
             {categories?.map((category: Category, index: number) => {
               const categoryExpenses = expenses
-                .filter((expense: Expense) =>
-                  expense.categories.some(
-                    (c: Category) => c.name === category.name
-                  )
+                .filter(
+                  (expense: Expense) =>
+                    expense.category === category.name.toLowerCase()
                 )
                 .reduce(
                   (acc: number, curr: Expense) => acc + parseFloat(curr.amount),

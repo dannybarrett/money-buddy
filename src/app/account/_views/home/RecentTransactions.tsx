@@ -22,7 +22,7 @@ export default function RecentTransactions() {
         .map((transaction: any) => {
           return [...transaction.added];
         })
-        .flat(transactions.length),
+        .flat(),
     ]);
   }, [transactions]);
 
