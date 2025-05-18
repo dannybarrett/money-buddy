@@ -41,8 +41,6 @@ export default function EditExpense({
   const [categoryOpen, setCategoryOpen] = useState<boolean>(false);
   const [allCategories, setAllCategories] = useState<string[]>();
 
-  console.log("EXPENSE", expense);
-
   useEffect(() => {
     const expenseCategories = expenses
       .map((expense: Expense) => expense.category)
@@ -105,6 +103,7 @@ export default function EditExpense({
             id="amount"
             name="amount"
             defaultValue={expense.amount}
+            step="0.01"
             disabled={transactionId !== null}
             required
             className="pl-5.25 relative"

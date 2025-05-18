@@ -27,3 +27,12 @@ export function capitalizeTitle(title: string) {
     })
     .join(" ");
 }
+
+export function stringToCurrency(string: string) {
+  return parseFloat(string).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}

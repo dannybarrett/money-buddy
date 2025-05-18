@@ -308,7 +308,7 @@ export default function Expenses() {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell>Total</TableCell>
+              <TableCell>Total Expenses</TableCell>
               <TableCell colSpan={3}>
                 {filteredExpenses
                   .reduce(

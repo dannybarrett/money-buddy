@@ -88,6 +88,7 @@ export default function AddExpense() {
             id="amount"
             name="amount"
             placeholder="150.00"
+            step="0.01"
             required
             className="pl-5.25 relative"
           />

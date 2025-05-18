@@ -1,136 +1,106 @@
 import { useStore } from "../../store";
 import { Button } from "@/components/ui/button";
-import AddIncome from "./AddIncome";
 import { IncomeSource } from "@/lib/types";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { MoreHorizontal, Pencil, Trash } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
 import { deleteIncomeSource } from "../../actions";
+import AddIncomeButton from "./AddIncomeButton";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import EditIncome from "./EditIncome";
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import EditIncomeButton from "./EditIncomeButton";
+import { stringToCurrency } from "@/lib/utils";
 
 export default function Income() {
   const incomeSources = useStore((state: any) => state.incomeSources);
   const setIncomeSources = useStore((state: any) => state.setIncomeSources);
 
+  async function handleDelete(id: string) {
+    const query = await deleteIncomeSource(id);
+    if (query?.success) {
+      setIncomeSources(
+        incomeSources.filter((income: IncomeSource) => income.id !== id)
+      );
+    }
+  }
+
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 p-4 lg:p-8 lg:gap-8">
+      <header className="flex justify-between items-center">
+        <h1>Income</h1>
+        <AddIncomeButton />
+      </header>
       {incomeSources.length > 0 ? (
-        incomeSources.map((incomeSource: IncomeSource) => (
-          <Card key={incomeSource.id}>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                {incomeSource.name}
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <div className="flex flex-col items-start gap-2">
-                      <Sheet>
-                        <SheetTrigger
-                          aria-describedby="add-income-source"
-                          asChild
-                        >
-                          <Button variant="ghost">
-                            <Pencil /> Edit
-                          </Button>
-                        </SheetTrigger>
-                        <SheetContent
-                          side="bottom"
-                          aria-description="Add Income Source"
-                          className="h-5/6"
-                        >
-                          <SheetHeader>
-                            <SheetTitle>Edit Income Source</SheetTitle>
-                            <SheetDescription>
-                              Edit the income source.
-                            </SheetDescription>
-                          </SheetHeader>
-                          <EditIncome incomeSource={incomeSource} />
-                        </SheetContent>
-                      </Sheet>
-                      <Button
-                        variant="ghost"
-                        onClick={async () => {
-                          const oldIncomeSource = incomeSource;
-
-                          setIncomeSources(
-                            incomeSources.filter(
-                              (income: IncomeSource) =>
-                                income.id !== incomeSource.id
-                            )
-                          );
-
-                          const result = await deleteIncomeSource(
-                            incomeSource.id
-                          );
-
-                          if (!result?.success) {
-                            setIncomeSources([
-                              ...incomeSources,
-                              oldIncomeSource,
-                            ]);
-                          }
-                        }}
-                      >
-                        <Trash /> Delete
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead />
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {incomeSources.map((incomeSource: IncomeSource) => (
+              <TableRow key={incomeSource.id}>
+                <TableCell>{incomeSource.name}</TableCell>
+                <TableCell>{stringToCurrency(incomeSource.amount)}</TableCell>
+                <TableCell>
+                  {new Date(incomeSource.date).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="ghost">
+                        <MoreHorizontal />
                       </Button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </CardTitle>
-              <CardDescription>
-                {incomeSource.date?.toLocaleDateString()}
-              </CardDescription>
-              <CardContent>
-                <div>${parseFloat(incomeSource.amount).toFixed(2)}</div>
-              </CardContent>
-            </CardHeader>
-          </Card>
-        ))
+                    </PopoverTrigger>
+                    <PopoverContent className="flex flex-col gap-2 w-fit">
+                      <EditIncomeButton incomeSource={incomeSource} />
+                      <Button
+                        variant="destructive"
+                        onClick={() => handleDelete(incomeSource.id)}
+                      >
+                        Delete
+                      </Button>
+                    </PopoverContent>
+                  </Popover>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell>Total Income</TableCell>
+              <TableCell colSpan={3}>
+                {stringToCurrency(
+                  incomeSources
+                    .reduce(
+                      (acc: number, income: IncomeSource) =>
+                        acc + parseFloat(income.amount),
+                      0
+                    )
+                    .toString()
+                )}
+              </TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
       ) : (
         <>
-          <div>No Income Sources. Add one below.</div>
+          <div>No Income Sources. Add one to get started!</div>
         </>
       )}
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button className="w-full lg:w-fit">Add Income Source</Button>
-        </SheetTrigger>
-        <SheetContent
-          side="bottom"
-          aria-description="Add Income Source"
-          className="h-5/6"
-        >
-          <SheetHeader>
-            <SheetTitle>Add Income Source</SheetTitle>
-            <SheetDescription>
-              Add a new income source to your account.
-            </SheetDescription>
-          </SheetHeader>
-          <AddIncome />
-        </SheetContent>
-      </Sheet>
     </div>
   );
 }

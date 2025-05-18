@@ -15,6 +15,8 @@ export default function BankAccounts() {
   const setAccountInfo = useStore((state: any) => state.setAccountInfo);
   async function generateToken() {
     const token = await createLinkToken();
+
+    console.log("link token", token);
     if (token && "link_token" in token) {
       setLinkToken(token.link_token);
     }

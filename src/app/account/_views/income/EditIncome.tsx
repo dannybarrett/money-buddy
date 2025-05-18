@@ -7,6 +7,11 @@ import { Button } from "@/components/ui/button";
 import { useStore } from "../../store";
 import { IncomeSource } from "@/lib/types";
 import { SheetClose } from "@/components/ui/sheet";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 export default function EditIncome({
   incomeSource,
 }: {
@@ -40,29 +45,45 @@ export default function EditIncome({
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Label htmlFor="name">Name</Label>
-      <Input
-        type="text"
-        id="name"
-        name="name"
-        defaultValue={incomeSource.name}
-      />
-      <Label htmlFor="amount">Amount</Label>
-      <Input
-        type="number"
-        id="amount"
-        name="amount"
-        defaultValue={incomeSource.amount}
-      />
-      <Label htmlFor="date">Date</Label>
-      <Calendar
-        mode="single"
-        selected={date}
-        onSelect={setDate}
-        defaultMonth={date}
-        className="w-full"
-      />
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-4 max-w-md mx-auto"
+    >
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="name">Name</Label>
+        <Input
+          type="text"
+          id="name"
+          name="name"
+          defaultValue={incomeSource.name}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="amount">Amount</Label>
+        <Input
+          type="number"
+          id="amount"
+          name="amount"
+          defaultValue={incomeSource.amount}
+          step="0.01"
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="date">Date</Label>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline">{date?.toLocaleDateString()}</Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              className="w-full"
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
       <SheetClose asChild>
         <Button type="submit">Save Income Source</Button>
       </SheetClose>
