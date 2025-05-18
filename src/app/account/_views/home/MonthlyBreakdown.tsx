@@ -103,9 +103,9 @@ export default function MonthlyBreakdown() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Monthly Breakdown</CardTitle>
+        <CardTitle className="text-xl">Monthly Breakdown</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pl-0">
         <ChartContainer
           config={config}
           className="h-[150px] lg:h-[400px] w-full"
@@ -113,7 +113,12 @@ export default function MonthlyBreakdown() {
           <BarChart data={data().reverse()}>
             <XAxis dataKey="name" />
             <YAxis name="amount" />
-            <Bar dataKey="income" fill="var(--chart-1)" radius={4} />
+            <Bar
+              dataKey="income"
+              fill="var(--chart-1)"
+              className="rounded-lg"
+              radius={4}
+            />
             <Bar dataKey="expenses" fill="var(--chart-2)" radius={4} />
             <Bar dataKey="savings" fill="var(--chart-3)" radius={4} />
           </BarChart>

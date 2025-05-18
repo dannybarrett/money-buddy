@@ -31,18 +31,40 @@ export default function AddExpense() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Label htmlFor="name">Name</Label>
-      <Input type="text" id="name" name="name" />
-      <Label htmlFor="amount">Amount</Label>
-      <Input type="number" id="amount" name="amount" />
-      <Label htmlFor="date">Date</Label>
-      <Calendar
-        mode="single"
-        selected={date}
-        onSelect={setDate}
-        className="w-full"
-      />
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 mx-auto">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="name">Name</Label>
+        <Input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Groceries"
+          required
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="amount">Amount</Label>
+        <div className="relative">
+          <Input
+            type="number"
+            id="amount"
+            name="amount"
+            placeholder="150.00"
+            required
+            className="pl-5.25 relative"
+          />
+          <span className="absolute top-2 left-3 text-gray-500 text-sm">$</span>
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="date">Date</Label>
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          className="w-full"
+        />
+      </div>
       <SheetClose asChild>
         <Button type="submit">Add Expense</Button>
       </SheetClose>

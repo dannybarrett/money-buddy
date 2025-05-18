@@ -14,16 +14,18 @@ export default function Home() {
     }
   }, [data]);
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 lg:gap-8 p-4 lg:p-8">
       <header>
-        <h1>Welcome back, {session.user?.name}!</h1>
-        <p>
+        <h1 className="text-3xl">Welcome back, {session.user?.name}!</h1>
+        <p className="text-gray-600">
           This is your dashboard. Here you can see your income and expenses.
         </p>
       </header>
       <Overview />
-      <MonthlyBreakdown />
-      <MonthlyBudget />
+      <div className="grid lg:grid-cols-[75fr_25fr] lg:gap-8 gap-4">
+        <MonthlyBreakdown />
+        <MonthlyBudget />
+      </div>
       <RecentTransactions />
     </div>
   );

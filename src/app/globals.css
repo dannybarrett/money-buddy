@@ -53,7 +53,7 @@
   --background: oklch(1 0 0);
   --foreground: var(--money-buddy-navy);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.13 0.028 261.692);
+  --card-foreground: var(--money-buddy-navy);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.13 0.028 261.692);
   --primary: oklch(0.21 0.034 264.665);
@@ -134,7 +134,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground w-full max-w-screen overflow-x-hidden;
   }
   h1,
   h2,

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Category, Expense } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { Progress } from "@/components/ui/progress";
+import { Pencil } from "lucide-react";
 
 export default function MonthlyBudget() {
   const budget = useStore((state: any) => state.budget);
@@ -18,14 +19,17 @@ export default function MonthlyBudget() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Monthly Budget</CardTitle>
+      <CardHeader className="flex flex-row justify-between items-center">
+        <CardTitle className="text-xl">Monthly Budget</CardTitle>
+        <Button variant="outline" size="icon" onClick={() => setView("budget")}>
+          <Pencil className="w-4 h-4" />
+        </Button>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-4">
         {budget.categories?.length === 0 ? (
           <p>No budget set</p>
         ) : (
-          <div>
+          <div className="flex flex-col gap-4">
             {categories?.map((category: Category, index: number) => {
               const categoryExpenses = expenses
                 .filter((expense: Expense) =>
@@ -41,9 +45,9 @@ export default function MonthlyBudget() {
 
               return (
                 <div key={index}>
-                  <div className="flex justify-between">
-                    <p>{category.name}</p>
-                    <p>
+                  <div className="flex  items-end justify-between">
+                    <p className="text-sm font-medium">{category.name}</p>
+                    <p className="text-xs">
                       ${categoryExpenses.toFixed(2)} / $
                       {categoryAmount.toFixed(2)}
                     </p>
@@ -60,7 +64,6 @@ export default function MonthlyBudget() {
             })}
           </div>
         )}
-        <Button onClick={() => setView("budget")}>Create Budget</Button>
       </CardContent>
     </Card>
   );

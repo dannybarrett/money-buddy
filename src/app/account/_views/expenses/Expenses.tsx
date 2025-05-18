@@ -14,12 +14,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { MoreHorizontal, Pencil, Trash } from "lucide-react";
+import { Filter, MoreHorizontal } from "lucide-react";
 import EditExpense from "./EditExpense";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -27,27 +26,130 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { deleteExpense } from "../../actions";
+import { Label } from "@/components/ui/label";
+import { useEffect, useState } from "react";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Select,
+  SelectItem,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function Expenses() {
   const expenses = useStore((state: any) => state.expenses);
   const setExpenses = useStore((state: any) => state.setExpenses);
   const transactions = useStore((state: any) => state.transactions);
+  const [startDate, setStartDate] = useState<Date>(
+    new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+  );
+  const [endDate, setEndDate] = useState<Date>(
+    new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
+  );
+  const [filteredExpenses, setFilteredExpenses] = useState<any[]>([]);
+  const [ascending, setAscending] = useState<boolean>(true);
 
   const allExpenses = [
     ...expenses,
-    ...transactions
-      .flatMap((item: any) => item.added)
-      .filter(
-        (item: any) =>
-          item.amount > 0 &&
-          !expenses.some((expense: any) => expense.transaction_id === item.id)
-      ),
+    ...transactions.flatMap((item: any) => item.added),
   ];
 
+  useEffect(() => {
+    setFilteredExpenses(
+      allExpenses
+        .filter(
+          (expense: any) =>
+            new Date(expense.date).getTime() >= startDate.getTime() &&
+            new Date(expense.date).getTime() <= endDate.getTime() &&
+            expense.amount > 0
+        )
+        .sort((a: any, b: any) =>
+          ascending
+            ? new Date(a.date).getTime() - new Date(b.date).getTime()
+            : new Date(b.date).getTime() - new Date(a.date).getTime()
+        )
+    );
+  }, [startDate, endDate, ascending, allExpenses]);
+
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 p-4 lg:p-8 lg:gap-8">
       <header className="flex justify-between items-center">
-        <h1>Expenses</h1>
+        <div className="flex items-center gap-2">
+          <h1>Expenses</h1>
+
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline">
+                <Filter />
+              </Button>
+            </SheetTrigger>
+
+            <SheetContent
+              side="bottom"
+              className="h-5/6 rounded-t-lg p-4 lg:p-8"
+            >
+              <SheetHeader className="text-center">
+                <SheetTitle className="text-2xl">Filter Expenses</SheetTitle>
+              </SheetHeader>
+              <div className="grid gap-4 lg:gap-8 lg:max-w-md w-full mx-auto">
+                <div className="grid grid-cols-2 gap-2 lg:gap-8">
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="startDate">Start Date</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline">
+                          {new Date(startDate).toLocaleDateString()}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <Calendar
+                          mode="single"
+                          selected={startDate}
+                          onSelect={(day) => setStartDate(day || new Date())}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="endDate">End Date</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline">
+                          {new Date(endDate).toLocaleDateString()}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <Calendar
+                          mode="single"
+                          selected={endDate}
+                          onSelect={(day) => setEndDate(day || new Date())}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="sort">Sort by</Label>
+                  <Select
+                    defaultValue={ascending ? "asc" : "desc"}
+                    onValueChange={(value) => {
+                      setAscending(value === "asc");
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Sort by" />
+                    </SelectTrigger>
+                    <SelectContent onChange={(value) => console.log(value)}>
+                      <SelectItem value="asc">Ascending</SelectItem>
+                      <SelectItem value="desc">Descending</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
         <Sheet>
           <SheetTrigger asChild>
             <Button>Add Expense</Button>
@@ -55,10 +157,10 @@ export default function Expenses() {
           <SheetContent
             side="bottom"
             aria-description="Add Expense"
-            className="h-5/6"
+            className="h-5/6 rounded-t-lg p-4 lg:p-8"
           >
-            <SheetHeader>
-              <SheetTitle>Add Expense</SheetTitle>
+            <SheetHeader className="text-center">
+              <SheetTitle className="text-2xl">Add Expense</SheetTitle>
               <SheetDescription>
                 Add a new expense to your account.
               </SheetDescription>
@@ -67,9 +169,9 @@ export default function Expenses() {
           </SheetContent>
         </Sheet>
       </header>
-      {allExpenses.length > 0 ? (
+
+      {filteredExpenses.length > 0 ? (
         <Table>
-          <TableCaption>Expenses</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
@@ -79,88 +181,89 @@ export default function Expenses() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {allExpenses
-              .filter(
-                (expense) =>
-                  new Date(expense.date).getMonth() === new Date().getMonth()
-              )
-              .sort(
-                (a: any, b: any) =>
-                  new Date(a.date).getTime() - new Date(b.date).getTime()
-              )
-              .map((expense: any) => (
-                <TableRow key={expense.id || expense.transaction_id}>
-                  <TableCell className="w-full lg:w-fit overflow-x-scroll max-w-[15ch] lg:max-w-none lg:overflow-x-hidden">
-                    {expense.name}
-                  </TableCell>
-                  <TableCell>
-                    ${parseFloat(expense.amount).toFixed(2)}
-                  </TableCell>
-                  <TableCell>
-                    {new Date(expense.date).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent>
-                        <Sheet>
-                          <SheetTrigger asChild>
-                            <Button variant="ghost">
-                              <Pencil /> Edit
-                            </Button>
-                          </SheetTrigger>
-                          <SheetContent
-                            side="bottom"
-                            aria-description="Edit Expense"
-                            className="h-5/6"
-                          >
-                            <SheetHeader>
-                              <SheetTitle>Edit Expense</SheetTitle>
-                              <SheetDescription>
-                                Edit the expense details.
-                              </SheetDescription>
-                            </SheetHeader>
-                            <EditExpense
-                              expense={expense}
-                              transactionId={expense.transaction_id || null}
-                            />
-                          </SheetContent>
-                        </Sheet>
-                        <Button
-                          variant="ghost"
-                          onClick={async () => {
-                            const result = await deleteExpense(expense.id);
-                            if (result?.success) {
-                              setExpenses(
-                                expenses.filter((e: any) => e.id !== expense.id)
-                              );
-                            }
-                          }}
+            {filteredExpenses.map((expense: any) => (
+              <TableRow key={expense.id || expense.transaction_id}>
+                <TableCell className="w-full lg:w-fit overflow-x-scroll max-w-[15ch] lg:max-w-none lg:overflow-x-hidden">
+                  {expense.name}
+                </TableCell>
+                <TableCell>
+                  {parseFloat(expense.amount).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </TableCell>
+                <TableCell>
+                  {new Date(expense.date).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="flex flex-col w-fit items-start gap-2">
+                      <Sheet>
+                        <SheetTrigger asChild>
+                          <Button className="w-full text-center">Edit</Button>
+                        </SheetTrigger>
+                        <SheetContent
+                          side="bottom"
+                          aria-description="Edit Expense"
+                          className="h-5/6 rounded-t-lg p-4 lg:p-8"
                         >
-                          <Trash /> Delete
-                        </Button>
-                      </PopoverContent>
-                    </Popover>
-                  </TableCell>
-                </TableRow>
-              ))}
+                          <SheetHeader className="text-center">
+                            <SheetTitle className="text-2xl">
+                              Edit Expense
+                            </SheetTitle>
+                            <SheetDescription>
+                              Edit the expense details.
+                            </SheetDescription>
+                          </SheetHeader>
+                          <EditExpense
+                            expense={expense}
+                            transactionId={expense.transaction_id || null}
+                          />
+                        </SheetContent>
+                      </Sheet>
+                      <Button
+                        variant="destructive"
+                        className="w-full text-center"
+                        onClick={async () => {
+                          const result = await deleteExpense(expense.id);
+                          if (result?.success) {
+                            setExpenses(
+                              expenses.filter((e: any) => e.id !== expense.id)
+                            );
+                          }
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </PopoverContent>
+                  </Popover>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
           <TableFooter>
             <TableRow>
               <TableCell>Total</TableCell>
               <TableCell colSpan={3}>
-                $
-                {allExpenses
+                {filteredExpenses
                   .reduce(
                     (acc: number, expense: any) =>
                       acc + parseFloat(expense.amount),
                     0
                   )
-                  .toFixed(2)}
+                  .toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
               </TableCell>
             </TableRow>
           </TableFooter>

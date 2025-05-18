@@ -19,20 +19,25 @@ export default async function Account() {
   const budget = await getBudget();
   const accountInfo = await getAccountInfo();
   const transactions = await getTransactions();
+
+  // return <div>test</div>;
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <AccountNav />
-      <ViewHandler
-        state={{
-          view: "home",
-          session: session.session,
-          incomeSources: incomeSources ?? [],
-          expenses: expenses ?? [],
-          budget: budget ?? null,
-          accountInfo: accountInfo ?? [],
-          transactions: transactions ?? [],
-        }}
-      />
+      <div className="h-full min-h-screen max-w-screen grid grid-rows-[1fr_auto] lg:grid-cols-[auto_1fr] relative">
+        <AccountNav className="sticky top-0 h-screen hidden lg:flex" />
+        <ViewHandler
+          state={{
+            view: "home",
+            session: session.session,
+            incomeSources: incomeSources ?? [],
+            expenses: expenses ?? [],
+            budget: budget ?? null,
+            accountInfo: accountInfo ?? [],
+            transactions: transactions ?? [],
+          }}
+        />
+      </div>
+      <AccountNav className="sticky bottom-0 lg:hidden" />
     </Suspense>
   );
 }

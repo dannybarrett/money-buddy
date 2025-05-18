@@ -29,9 +29,9 @@ export default function RecentTransactions() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent Transactions</CardTitle>
+        <CardTitle className="text-xl">Recent Transactions</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-4">
         <Table>
           {/* <TableCaption>Recent Transactions</TableCaption> */}
           <TableHeader>
@@ -45,7 +45,7 @@ export default function RecentTransactions() {
             {recentTransactions.slice(0, showIndex).map((transaction: any) => {
               return (
                 <TableRow key={transaction.transaction_id}>
-                  <TableCell className="flex items-center gap-1">
+                  <TableCell className="flex items-center gap-1 max-w-[15ch] lg:max-w-full lg:overflow-auto overflow-scroll">
                     <img
                       src={transaction.personal_finance_category_icon_url}
                       alt={transaction.name}
@@ -63,14 +63,21 @@ export default function RecentTransactions() {
                   >
                     ${Math.abs(transaction.amount).toFixed(2)}
                   </TableCell>
-                  <TableCell>{transaction.date}</TableCell>
+                  <TableCell>
+                    {new Date(transaction.date).toLocaleDateString()}
+                  </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
         {showIndex < recentTransactions.length && (
-          <Button onClick={() => setShowIndex(showIndex + 5)}>Show More</Button>
+          <Button
+            onClick={() => setShowIndex(showIndex + 5)}
+            className="w-full lg:w-fit"
+          >
+            Show More
+          </Button>
         )}
       </CardContent>
     </Card>

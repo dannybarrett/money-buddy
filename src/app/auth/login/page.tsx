@@ -12,11 +12,19 @@ import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const { data: session } = authClient.useSession();
+
+  useEffect(() => {
+    if (session) {
+      redirect("/account");
+    }
+  }, [session]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

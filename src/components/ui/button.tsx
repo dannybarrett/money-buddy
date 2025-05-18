@@ -12,7 +12,7 @@ const buttonVariants = cva(
         default:
           "bg-money-buddy-teal text-white shadow-xs hover:bg-money-buddy-teal/90",
         destructive:
-          "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+          "bg-rose-500 text-white shadow-xs hover:bg-rose-500/90 focus-visible:ring-rose-500/20 dark:focus-visible:ring-rose-500/40 dark:bg-rose-500/60",
         outline:
           "border bg-background shadow-xs hover:bg-money-buddy-coral/80 hover:text-white dark:bg-input/30 dark:border-input dark:hover:bg-input/50 transition-colors duration-100",
         secondary:
