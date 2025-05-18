@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Hero() {
   return (
-    <section className="section-padding bg-gradient-to-br from-white to-money-buddy-light-gray p-4 lg:p-8">
+    <section className="bg-gradient-to-br from-white to-money-buddy-light-gray p-4 lg:p-8">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="animate-fade-in">
