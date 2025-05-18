@@ -70,7 +70,7 @@ export default function Expenses() {
             : new Date(b.date).getTime() - new Date(a.date).getTime()
         )
     );
-  }, [startDate, endDate, ascending, allExpenses]);
+  }, [startDate, endDate, ascending]);
 
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-8 lg:gap-8">
