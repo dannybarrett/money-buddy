@@ -27,7 +27,10 @@ export default function GetStarted() {
   ];
 
   return (
-    <section className="section-padding bg-money-buddy-light-gray grid gap-16">
+    <section
+      id="how-it-works"
+      className="section-padding bg-money-buddy-light-gray grid gap-16"
+    >
       <div className="container mx-auto text-center grid gap-4">
         <h2 className="text-3xl">Getting started is easy</h2>
         <p className="text-lg text-gray-600">

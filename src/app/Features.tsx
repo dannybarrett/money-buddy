@@ -3,7 +3,7 @@ import { DollarSign, Landmark, PieChart } from "lucide-react";
 
 export default function Features() {
   return (
-    <section className="p-4 py-16 lg:p-16 lg:py-24">
+    <section id="features" className="p-4 py-16 lg:p-16 lg:py-24">
       <div className="container mx-auto text-center pb-16 grid gap-4 justify-items-center">
         <h2 className="text-3xl">Powerful features to manage your money</h2>
         <p className="text-lg text-gray-600 max-w-[60ch]">

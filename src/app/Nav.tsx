@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { CreditCard, LogIn, Menu, UserRoundPlus } from "lucide-react";
+import { CreditCard, Menu } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -65,17 +65,12 @@ function NavLinks({ setOpen }: { setOpen: (open: boolean) => void }) {
       </Link>
       <div className="flex flex-col lg:flex-row gap-4">
         <Link href="/auth/login">
-          <Button
-            variant="outline"
-            className="rounded-full w-full md:w-fit border-money-buddy-navy shadow-none"
-          >
-            <LogIn />
+          <Button variant="outline" className="w-full md:w-fit">
             Login
           </Button>
         </Link>
         <Link href="/auth/signup">
-          <Button variant="secondary" className="rounded-full w-full md:w-fit">
-            <UserRoundPlus />
+          <Button variant="secondary" className="w-full md:w-fit">
             Sign up free
           </Button>
         </Link>

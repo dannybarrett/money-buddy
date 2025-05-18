@@ -16,9 +16,7 @@ export default function Hero() {
               you want to).
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="cta-button" variant="secondary">
-                Get started for free
-              </Button>
+              <Button className="cta-button">Get started for free</Button>
               <Button variant="outline" className="secondary-button">
                 Learn more
               </Button>
