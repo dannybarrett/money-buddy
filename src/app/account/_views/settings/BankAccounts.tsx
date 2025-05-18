@@ -7,8 +7,14 @@ import {
 } from "../../plaid-actions";
 import { useEffect, useState } from "react";
 import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
-import { Trash } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { useStore } from "../../store";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 export default function BankAccounts() {
   const [linkToken, setLinkToken] = useState<string | null>(null);
   const accountInfo = useStore((state: any) => state.accountInfo);
@@ -30,38 +36,57 @@ export default function BankAccounts() {
     return <PlaidButton linkToken={linkToken ?? ""} />;
   }
 
+  console.log("accountInfo", accountInfo);
+
   return (
-    <div className="flex flex-col gap-4">
-      {accountInfo.map((bank: any) => (
-        <Card key={bank.item.institution_id}>
-          <CardHeader className="flex items-center justify-between">
-            <CardTitle>{bank.item.institution_name}</CardTitle>
-            <button
-              onClick={async () => {
-                await deleteAccessToken(bank.id);
-                setAccountInfo(await getAccountInfo());
-              }}
-            >
-              <Trash className="w-4" />
-            </button>
-          </CardHeader>
-          <CardContent>
-            {bank.accounts.map((account: any) => (
-              <div key={account.account_id}>
-                <p>
-                  <span className="font-light">{account.name}</span> -
-                  <span className="font-bold">
-                    {" "}
-                    ${account.balances.current}
-                  </span>
-                </p>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      ))}
+    <>
+      <div className="flex flex-wrap gap-4">
+        {accountInfo.map((bank: any) => (
+          <Card
+            key={bank.item.institution_id}
+            className="w-full lg:w-fit lg:min-w-sm"
+          >
+            <CardHeader className="flex items-center justify-between">
+              <CardTitle className="text-2xl">
+                {bank.item.institution_name}
+              </CardTitle>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost">
+                    <MoreHorizontal />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="flex flex-col gap-2 w-fit">
+                  <Button
+                    variant="destructive"
+                    onClick={async () => {
+                      await deleteAccessToken(bank.id);
+                      setAccountInfo(await getAccountInfo());
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </PopoverContent>
+              </Popover>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-2">
+              {bank.accounts.map((account: any) => (
+                <div key={account.account_id}>
+                  <p className="flex items-center gap-2 text-lg">
+                    <span className="font-light">{account.name}</span> -
+                    <span className="font-bold">
+                      {" "}
+                      ${account.balances.current}
+                    </span>
+                  </p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        ))}
+      </div>
       <PlaidButton linkToken={linkToken ?? ""} />
-    </div>
+    </>
   );
 }
 
@@ -81,8 +106,8 @@ function PlaidButton({ linkToken }: { linkToken: string }) {
   });
 
   return (
-    <button onClick={() => open()} className="action-button">
+    <Button onClick={() => open()} className="mt-4">
       Connect Bank
-    </button>
+    </Button>
   );
 }
