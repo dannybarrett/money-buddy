@@ -124,6 +124,9 @@ export default function Expenses() {
             >
               <SheetHeader className="text-center">
                 <SheetTitle className="text-2xl">Filter Expenses</SheetTitle>
+                <SheetDescription>
+                  Update your expense filters.
+                </SheetDescription>
               </SheetHeader>
               <div className="grid gap-4 lg:gap-8 lg:max-w-md w-full mx-auto">
                 <div className="grid grid-cols-2 gap-2 lg:gap-8">
