@@ -59,6 +59,7 @@ export const income = pgTable("income", {
   amount: text("amount").notNull().default("0.00"),
   date: timestamp("date").notNull(),
   categories: json("categories").notNull().default([]).$type<Category[]>(),
+  category: text("category"),
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -75,6 +76,7 @@ export const expenses = pgTable("expenses", {
   amount: text("amount").notNull().default("0.00"),
   date: timestamp("date").notNull(),
   categories: json("categories").notNull().default([]).$type<Category[]>(),
+  category: text("category"),
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),

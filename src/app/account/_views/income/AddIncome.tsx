@@ -21,7 +21,7 @@ export default function AddIncome() {
       name: name as string,
       amount: amount as string,
       date: date?.toISOString() as string,
-      categories: [],
+      category: null,
     });
 
     if (query?.success) {

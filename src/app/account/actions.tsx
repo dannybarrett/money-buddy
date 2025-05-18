@@ -34,7 +34,7 @@ export async function addIncomeSource(values: {
   name: string;
   amount: string;
   date: string;
-  categories: Category[];
+  category: string | null;
 }) {
   const session = await getSession();
 
@@ -49,8 +49,6 @@ export async function addIncomeSource(values: {
     })
     .returning();
 
-  console.log("NEW INCOME SOURCE", newIncomeSource);
-
   return {
     success: newIncomeSource.length > 0,
     incomeSource: newIncomeSource[0],
@@ -62,7 +60,7 @@ export async function updateIncomeSource(values: {
   name: string;
   amount: string;
   date: string;
-  categories: Category[];
+  category: string | null;
 }) {
   const session = await getSession();
 
@@ -114,7 +112,7 @@ export async function addExpense(values: {
   name: string;
   amount: string;
   date: string;
-  categories: Category[];
+  category: string | null;
 }) {
   const session = await getSession();
 
@@ -140,21 +138,16 @@ export async function updateExpense(values: {
   name: string;
   amount: string;
   date: string;
-  categories: Category[];
+  category: string | null;
   transactionId: string | null;
 }) {
   const session = await getSession();
 
   if (!session || !session.user) return;
 
-  const exists =
-    values.transactionId &&
-    (await db.$count(
-      expenses,
-      eq(expenses.transactionId, values.transactionId)
-    ));
+  const exists = await db.$count(expenses, eq(expenses.id, values.id));
 
-  if (exists) {
+  if (exists > 0) {
     const result = await db
       .update(expenses)
       .set({
@@ -168,21 +161,21 @@ export async function updateExpense(values: {
       success: result.length > 0,
       expense: result[0],
     };
+  } else {
+    const newExpense = await db
+      .insert(expenses)
+      .values({
+        ...values,
+        date: new Date(values.date),
+        userId: session.user.id,
+      })
+      .returning();
+
+    return {
+      success: newExpense.length > 0,
+      expense: newExpense[0],
+    };
   }
-
-  const newExpense = await db
-    .insert(expenses)
-    .values({
-      ...values,
-      date: new Date(values.date),
-      userId: session.user.id,
-    })
-    .returning();
-
-  return {
-    success: newExpense.length > 0,
-    expense: newExpense[0],
-  };
 }
 
 export async function deleteExpense(id: string) {

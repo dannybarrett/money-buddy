@@ -9,6 +9,7 @@ export interface IncomeSource {
   amount: string;
   date: Date;
   categories: Category[];
+  category: string | null;
   userId: string;
   createdAt: Date;
   updatedAt: Date;
@@ -20,6 +21,7 @@ export interface Expense {
   amount: string;
   date: Date;
   categories: Category[];
+  category: string | null;
   userId: string;
   createdAt: Date;
   updatedAt: Date;

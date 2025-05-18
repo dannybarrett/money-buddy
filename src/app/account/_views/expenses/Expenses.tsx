@@ -36,6 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { capitalizeTitle } from "@/lib/utils";
 
 export default function Expenses() {
   const expenses = useStore((state: any) => state.expenses);
@@ -49,10 +50,13 @@ export default function Expenses() {
   );
   const [filteredExpenses, setFilteredExpenses] = useState<any[]>([]);
   const [ascending, setAscending] = useState<boolean>(true);
-
+  const [category, setCategory] = useState<string | null>(null);
+  const [allCategories, setAllCategories] = useState<string[]>([]);
   const allExpenses = [
-    ...expenses,
-    ...transactions.flatMap((item: any) => item.added),
+    ...expenses.filter((expense: any) => expense.transactionId === null),
+    ...transactions
+      .flatMap((item: any) => item.added)
+      .filter((item: any) => item.amount > 0),
   ];
 
   useEffect(() => {
@@ -62,7 +66,14 @@ export default function Expenses() {
           (expense: any) =>
             new Date(expense.date).getTime() >= startDate.getTime() &&
             new Date(expense.date).getTime() <= endDate.getTime() &&
-            expense.amount > 0
+            expense.amount > 0 &&
+            (category === "all" ||
+              expense.category?.toLowerCase().replaceAll("_", " ") ===
+                category?.toLowerCase().replaceAll("_", " ") ||
+              expense.personal_finance_category?.primary
+                .toLowerCase()
+                .replaceAll("_", " ") ===
+                category?.toLowerCase().replaceAll("_", " "))
         )
         .sort((a: any, b: any) =>
           ascending
@@ -70,7 +81,29 @@ export default function Expenses() {
             : new Date(b.date).getTime() - new Date(a.date).getTime()
         )
     );
-  }, [startDate, endDate, ascending]);
+
+    const expenseCategories = expenses
+      .filter((expense: any) => expense.category !== null)
+      .map((expense: any) => expense.category);
+
+    const transactionCategories = transactions
+      .flatMap((item: any) => item.added)
+      .filter((item: any) => item.amount > 0)
+      .map((item: any) =>
+        item.personal_finance_category.primary
+          .toLowerCase()
+          .replaceAll("-", " ")
+          .replaceAll("_", " ")
+      );
+
+    const uniqueCategories = Array.from(
+      new Set([...expenseCategories, ...transactionCategories])
+    );
+
+    setAllCategories(uniqueCategories);
+
+    console.log(uniqueCategories);
+  }, [startDate, endDate, ascending, expenses, transactions, category]);
 
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-8 lg:gap-8">
@@ -87,7 +120,7 @@ export default function Expenses() {
 
             <SheetContent
               side="bottom"
-              className="h-5/6 rounded-t-lg p-4 lg:p-8"
+              className="h-7/8 rounded-t-lg p-4 lg:p-8"
             >
               <SheetHeader className="text-center">
                 <SheetTitle className="text-2xl">Filter Expenses</SheetTitle>
@@ -130,6 +163,25 @@ export default function Expenses() {
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
+                  <Label htmlFor="category">Category</Label>
+                  <Select
+                    defaultValue={category || "all"}
+                    onValueChange={(value) => setCategory(value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All</SelectItem>
+                      {allCategories.map((category: string) => (
+                        <SelectItem key={category} value={category}>
+                          {capitalizeTitle(category)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex flex-col gap-2">
                   <Label htmlFor="sort">Sort by</Label>
                   <Select
                     defaultValue={ascending ? "asc" : "desc"}
@@ -157,7 +209,7 @@ export default function Expenses() {
           <SheetContent
             side="bottom"
             aria-description="Add Expense"
-            className="h-5/6 rounded-t-lg p-4 lg:p-8"
+            className="h-9/10 rounded-t-lg p-4 lg:p-8"
           >
             <SheetHeader className="text-center">
               <SheetTitle className="text-2xl">Add Expense</SheetTitle>
@@ -169,7 +221,6 @@ export default function Expenses() {
           </SheetContent>
         </Sheet>
       </header>
-
       {filteredExpenses.length > 0 ? (
         <Table>
           <TableHeader>
@@ -225,23 +276,30 @@ export default function Expenses() {
                           <EditExpense
                             expense={expense}
                             transactionId={expense.transaction_id || null}
+                            personalFinanceCategory={
+                              expense.personal_finance_category?.primary
+                                .toLowerCase()
+                                .replaceAll("_", " ") || null
+                            }
                           />
                         </SheetContent>
                       </Sheet>
-                      <Button
-                        variant="destructive"
-                        className="w-full text-center"
-                        onClick={async () => {
-                          const result = await deleteExpense(expense.id);
-                          if (result?.success) {
-                            setExpenses(
-                              expenses.filter((e: any) => e.id !== expense.id)
-                            );
-                          }
-                        }}
-                      >
-                        Delete
-                      </Button>
+                      {expense.transactionId === null && (
+                        <Button
+                          variant="destructive"
+                          className="w-full text-center"
+                          onClick={async () => {
+                            const result = await deleteExpense(expense.id);
+                            if (result?.success) {
+                              setExpenses(
+                                expenses.filter((e: any) => e.id !== expense.id)
+                              );
+                            }
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      )}
                     </PopoverContent>
                   </Popover>
                 </TableCell>
