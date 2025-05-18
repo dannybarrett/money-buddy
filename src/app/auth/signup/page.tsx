@@ -10,12 +10,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
-import { Loader, UserRoundPlus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useState } from "react";
 
-export default function Login() {
+export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,13 +45,15 @@ export default function Login() {
   }
 
   return (
-    <div className="flex flex-col gap-4 items-center justify-center h-full p-4 lg:p-8">
+    <div className="flex flex-col gap-8 items-center justify-center h-full section-padding">
       <Card className="w-full max-w-md p-4 lg:p-8">
         <CardHeader className="p-0 text-center">
           <CardTitle>
-            <h1>Sign up</h1>
+            <h1 className="text-3xl">Sign up</h1>
           </CardTitle>
-          <CardDescription>Create a new account</CardDescription>
+          <CardDescription className="text-gray-600 text-lg">
+            Create a new account
+          </CardDescription>
           <p className="text-rose-500 text-sm">{error}</p>
         </CardHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 lg:gap-8">
@@ -98,12 +99,10 @@ export default function Login() {
           <Button type="submit" disabled={loading}>
             {loading ? (
               <>
-                <Loader className="animate-spin" />
                 <span>Creating account...</span>
               </>
             ) : (
               <>
-                <UserRoundPlus />
                 <span>Create account</span>
               </>
             )}

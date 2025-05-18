@@ -49,13 +49,13 @@ function NavLinks({ setOpen }: { setOpen: (open: boolean) => void }) {
       >
         How it works
       </Link>
-      <Link
+      {/* <Link
         href="/#testimonials"
         className="hover:text-money-buddy-teal"
         onClick={() => setOpen(false)}
       >
         Testimonials
-      </Link>
+      </Link> */}
       <Link
         href="/#pricing"
         className="hover:text-money-buddy-teal"
