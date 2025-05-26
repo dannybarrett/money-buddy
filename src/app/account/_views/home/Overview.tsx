@@ -8,15 +8,16 @@ import {
   PiggyBank,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+
 export default function Overview() {
   const incomeSources = useStore((state: any) => state.incomeSources);
   const expenses = useStore((state: any) => state.expenses);
   const transactions = useStore((state: any) => state.transactions);
   const accountInfo = useStore((state: any) => state.accountInfo);
+  const setView = useStore((state: any) => state.setView);
   const [balance, setBalance] = useState(0);
   const [currentIncome, setCurrentIncome] = useState(0);
   const [currentExpenses, setCurrentExpenses] = useState(0);
-  // const [currentSavings, setCurrentSavings] = useState(0);
 
   useEffect(() => {
     setCurrentIncome(
@@ -53,29 +54,33 @@ export default function Overview() {
     {
       name: "Balance",
       value: balance,
+      view: "home",
       icon: (
-        <Landmark className="bg-indigo-500/10 text-indigo-500 rounded-lg p-2.5 w-10 h-10" />
+        <Landmark className="bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-500 rounded-lg p-2.5 w-10 h-10" />
       ),
     },
     {
       name: "Income",
       value: currentIncome,
+      view: "income",
       icon: (
-        <BanknoteArrowUp className="bg-emerald-500/10 text-emerald-500 rounded-lg p-2.5 w-10 h-10" />
+        <BanknoteArrowUp className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 rounded-lg p-2.5 w-10 h-10" />
       ),
     },
     {
       name: "Expenses",
       value: currentExpenses,
+      view: "expenses",
       icon: (
-        <BanknoteArrowDown className="bg-rose-500/10 text-rose-500 rounded-lg p-2.5 w-10 h-10" />
+        <BanknoteArrowDown className="bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 rounded-lg p-2.5 w-10 h-10" />
       ),
     },
     {
       name: "Savings",
       value: currentIncome - currentExpenses,
+      view: "home",
       icon: (
-        <PiggyBank className="bg-money-buddy-coral/10 text-money-buddy-coral rounded-lg p-2.5 w-10 h-10" />
+        <PiggyBank className="bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 rounded-lg p-2.5 w-10 h-10" />
       ),
     },
   ];
@@ -86,7 +91,7 @@ export default function Overview() {
         <Card key={card.name}>
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle className="text-xl">{card.name}</CardTitle>
-            {card.icon}
+            <button onClick={() => setView(card.view)}>{card.icon}</button>
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold">

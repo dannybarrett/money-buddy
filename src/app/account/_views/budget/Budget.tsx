@@ -50,19 +50,27 @@ export default function BudgetView() {
     );
   }, [transactions, expenses]);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const name = formData.get("name");
-    const amount = formData.get("amount");
+  // function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  //   e.preventDefault();
+  //   const formData = new FormData(e.target as HTMLFormElement);
+  //   const name = formData.get("name");
+  //   const amount = formData.get("amount");
 
+  //   setCategories([
+  //     ...categories,
+  //     { name: (name as string).toLowerCase(), amount: amount as string },
+  //   ]);
+
+  //   (e.target as HTMLFormElement).reset();
+  // }
+
+  function handleSubmit(category: Category) {
     setCategories([
       ...categories,
-      { name: (name as string).toLowerCase(), amount: amount as string },
+      { name: category.name.toLowerCase(), amount: category.amount },
     ]);
-
-    (e.target as HTMLFormElement).reset();
   }
+
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-8 max-w-2xl">
       <h1>Budget</h1>
@@ -71,7 +79,10 @@ export default function BudgetView() {
       ) : (
         <div className="flex flex-col gap-4">
           {categories.map((category: any, index: number) => (
-            <div key={index} className="grid grid-cols-[1fr_1fr_auto] gap-2">
+            <div
+              key={category.name}
+              className="grid grid-cols-[1fr_1fr_auto] gap-2"
+            >
               <Input
                 type="text"
                 defaultValue={capitalizeTitle(category.name)}
@@ -107,38 +118,10 @@ export default function BudgetView() {
           ))}
         </div>
       )}
-      <form
+      <NewCategoryForm
         onSubmit={handleSubmit}
-        className="grid grid-cols-[1fr_1fr_auto] gap-2"
-      >
-        {/* <Input
-          type="text"
-          name="name"
-          required={true}
-          placeholder="Category Name"
-        /> */}
-        <Select name="name">
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Category" />
-          </SelectTrigger>
-          <SelectContent>
-            {existingCategories.map((category: string) => (
-              <SelectItem key={category} value={category}>
-                {capitalizeTitle(category)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Input
-          type="number"
-          name="amount"
-          required={true}
-          placeholder="Amount"
-        />
-        <Button type="submit" variant="secondary" className="w-fit min-w-21">
-          Add
-        </Button>
-      </form>
+        existingCategories={existingCategories}
+      />
       <Button
         onClick={async () => {
           const newBudget = { ...budget, categories: categories };
@@ -153,6 +136,53 @@ export default function BudgetView() {
         className="w-fit"
       >
         Save Budget
+      </Button>
+    </div>
+  );
+}
+
+function NewCategoryForm({
+  onSubmit,
+  existingCategories,
+}: {
+  onSubmit: (category: Category) => void;
+  existingCategories: any[];
+}) {
+  const [name, setName] = useState("");
+  const [amount, setAmount] = useState("");
+
+  return (
+    <div className="flex gap-2">
+      <Select
+        name="name"
+        value={name}
+        onValueChange={(value) => setName(value)}
+      >
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Category" />
+        </SelectTrigger>
+        <SelectContent>
+          {existingCategories.map((category: string) => (
+            <SelectItem key={category} value={category}>
+              {capitalizeTitle(category)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Input
+        type="number"
+        name="amount"
+        required={true}
+        placeholder="Amount"
+        onChange={(event) => setAmount(event.target.value)}
+      />
+      <Button
+        type="submit"
+        variant="secondary"
+        className="w-fit min-w-21"
+        onClick={() => onSubmit({ name, amount })}
+      >
+        Add
       </Button>
     </div>
   );
