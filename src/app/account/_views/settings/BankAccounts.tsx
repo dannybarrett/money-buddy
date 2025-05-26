@@ -24,7 +24,7 @@ export default function BankAccounts() {
 
     console.log("link token", token);
     if (token && "link_token" in token) {
-      setLinkToken(token.link_token);
+      setLinkToken(token.link_token as string);
     }
   }
 
