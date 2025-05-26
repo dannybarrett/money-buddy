@@ -14,7 +14,10 @@ import {
 } from "plaid";
 
 const configuration = new Configuration({
-  basePath: PlaidEnvironments.sandbox,
+  basePath:
+    process.env.PLAID_ENVIRONMENT === "sandbox"
+      ? PlaidEnvironments.sandbox
+      : PlaidEnvironments.production,
   baseOptions: {
     headers: {
       "PLAID-CLIENT-ID": process.env.PLAID_CLIENT_ID,
@@ -41,7 +44,7 @@ export async function createLinkToken() {
     client_name: "Money Buddy Dev",
     products: [Products.Auth, Products.Transactions],
     language: "en",
-    redirect_uri: "http://localhost:3000/",
+    redirect_uri: process.env.PLAID_REDIRECT_URI,
     country_codes: [CountryCode.Us],
   };
 
