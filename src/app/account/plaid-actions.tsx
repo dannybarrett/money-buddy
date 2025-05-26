@@ -41,7 +41,7 @@ export async function createLinkToken() {
     user: {
       client_user_id: session.user.id,
     },
-    client_name: "Money Buddy Dev",
+    client_name: "Money Buddy",
     products: [Products.Auth, Products.Transactions],
     language: "en",
     redirect_uri: process.env.PLAID_REDIRECT_URI,
