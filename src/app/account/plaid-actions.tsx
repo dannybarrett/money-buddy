@@ -42,12 +42,13 @@ export async function createLinkToken() {
       client_user_id: session.user.id,
     },
     client_name: "Money Buddy",
-    products: [Products.Auth, Products.Transactions],
+    products: [Products.Transactions],
     language: "en",
     redirect_uri: process.env.PLAID_REDIRECT_URI,
     country_codes: [CountryCode.Us],
   };
 
+  console.log("Creating link token with request:", request);
   let createTokenResponse;
   let errorMessage = "";
   await client
@@ -56,11 +57,15 @@ export async function createLinkToken() {
       createTokenResponse = response.data;
     })
     .catch((error) => {
-      console.error("Error creating link token:", error);
+      if (error.response && error.response.data) {
+        console.error("Plaid API error:", error.response.data);
+      }
+
       errorMessage = error.message;
+      error = error;
     });
 
-  if (errorMessage) return { error: errorMessage };
+  if (errorMessage) return { error: JSON.parse(JSON.stringify(errorMessage)) };
 
   return createTokenResponse;
 }
