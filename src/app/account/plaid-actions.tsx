@@ -54,7 +54,8 @@ export async function createLinkToken() {
   } catch (error) {
     console.error(error);
     return {
-      error: "Failed to create link token",
+      message: "Failed to create link token",
+      error: error,
     };
   }
 }
