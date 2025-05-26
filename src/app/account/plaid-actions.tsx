@@ -48,16 +48,21 @@ export async function createLinkToken() {
     country_codes: [CountryCode.Us],
   };
 
-  try {
-    const createTokenResponse = await client.linkTokenCreate(request);
-    return createTokenResponse.data;
-  } catch (error) {
-    console.error(error);
-    return {
-      message: "Failed to create link token",
-      error: error,
-    };
-  }
+  let createTokenResponse;
+  let errorMessage = "";
+  await client
+    .linkTokenCreate(request)
+    .then((response) => {
+      createTokenResponse = response.data;
+    })
+    .catch((error) => {
+      console.error("Error creating link token:", error);
+      errorMessage = error.message;
+    });
+
+  if (errorMessage) return { error: errorMessage };
+
+  return createTokenResponse;
 }
 
 export async function exchangePublicToken(publicToken: string) {
