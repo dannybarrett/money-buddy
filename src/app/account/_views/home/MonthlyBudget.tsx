@@ -5,6 +5,7 @@ import { Category, Expense } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { Pencil } from "lucide-react";
+import { capitalizeTitle } from "@/lib/utils";
 
 export default function MonthlyBudget() {
   const budget = useStore((state: any) => state.budget);
@@ -45,7 +46,9 @@ export default function MonthlyBudget() {
               return (
                 <div key={index}>
                   <div className="flex  items-end justify-between">
-                    <p className="text-sm font-medium">{category.name}</p>
+                    <p className="text-sm font-medium">
+                      {capitalizeTitle(category.name)}
+                    </p>
                     <p className="text-xs">
                       ${categoryExpenses.toFixed(2)} / $
                       {categoryAmount.toFixed(2)}

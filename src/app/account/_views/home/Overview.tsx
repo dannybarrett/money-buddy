@@ -19,22 +19,44 @@ export default function Overview() {
   const [currentIncome, setCurrentIncome] = useState(0);
   const [currentExpenses, setCurrentExpenses] = useState(0);
 
+  const currentMonth = new Date().getMonth();
+
   useEffect(() => {
     setCurrentIncome(
-      incomeSources.reduce(
-        (acc: number, curr: IncomeSource) => acc + parseFloat(curr.amount),
-        0
-      )
+      incomeSources
+        .filter((item: any) => new Date(item.date).getMonth() === currentMonth)
+        .reduce(
+          (acc: number, curr: IncomeSource) => acc + parseFloat(curr.amount),
+          0
+        ) +
+        Math.abs(
+          transactions
+            .flatMap((item: any) => item.added)
+            .filter(
+              (item: any) =>
+                item.amount < 0 &&
+                new Date(item.date).getMonth() === currentMonth
+            )
+            .reduce(
+              (acc: number, curr: any) => acc + parseFloat(curr.amount),
+              0
+            )
+        )
     );
 
     setCurrentExpenses(
-      expenses.reduce(
-        (acc: number, curr: Expense) => acc + parseFloat(curr.amount),
-        0
-      ) +
+      expenses
+        .filter((item: any) => new Date(item.date).getMonth() === currentMonth)
+        .reduce(
+          (acc: number, curr: Expense) => acc + parseFloat(curr.amount),
+          0
+        ) +
         transactions
           .flatMap((item: any) => item.added)
-          .filter((item: any) => item.amount > 0)
+          .filter(
+            (item: any) =>
+              item.amount > 0 && new Date(item.date).getMonth() === currentMonth
+          )
           .reduce((acc: number, curr: any) => acc + parseFloat(curr.amount), 0)
     );
 
@@ -87,7 +109,7 @@ export default function Overview() {
 
   return (
     <div className="grid lg:grid-cols-4 gap-4">
-      {cards.map((card) => (
+      {cards.map(card => (
         <Card key={card.name}>
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle className="text-xl">{card.name}</CardTitle>
