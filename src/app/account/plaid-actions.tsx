@@ -61,7 +61,7 @@ export async function createLinkToken() {
         console.error("Plaid API error:", error.response.data);
       }
 
-      errorMessage = error.message;
+      errorMessage = error.response.data;
       error = error;
     });
 
